@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d2025" />
+    <meta
+      name="description"
+      content="An interactive Three.js lab for exploring fields and vector spaces."
+    />
+    <title>Field + Vector Space Lab</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Field and Vector Space Lab home">
+          <span class="brand-mark" aria-hidden="true">V</span>
+          <span>
+            <strong>Linear Algebra Lab</strong>
+            <small>AI-1115 · Interactive notes</small>
+          </span>
+        </a>
+
+        <nav class="mode-switch" aria-label="Choose concept">
+          <button class="mode-button active" data-mode="vector" aria-pressed="true">
+            Vector space
+          </button>
+          <button class="mode-button" data-mode="field" aria-pressed="false">
+            Field
+          </button>
+        </nav>
+
+        <button id="reset-view" class="quiet-button" type="button" title="Reset camera">
+          <span aria-hidden="true">↻</span> Reset view
+        </button>
+      </header>
+
+      <main>
+        <section class="intro">
+          <div>
+            <p class="eyebrow" id="eyebrow">VECTOR SPACE · ℝ³</p>
+            <h1 id="page-title">Build with vectors.</h1>
+          </div>
+          <p id="page-description">
+            Add and scale vectors, then watch every result stay inside their span.
+            That closure is what makes a vector space hold together.
+          </p>
+        </section>
+
+        <section class="workspace" aria-label="Interactive visualization">
+          <aside class="control-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-label">INPUTS</p>
+                <h2 id="control-title">Choose two vectors</h2>
+              </div>
+              <span class="dimension-tag" id="dimension-tag">ℝ³</span>
+            </div>
+
+            <div id="vector-controls">
+              <div class="vector-control" data-vector="u">
+                <div class="vector-heading">
+                  <span class="legend-dot dot-u"></span>
+                  <strong>Vector u</strong>
+                  <output id="u-output">(2.0, 1.0, 0.5)</output>
+                </div>
+                <label>x <input id="ux" type="range" min="-3" max="3" value="2" step="0.1" /></label>
+                <label>y <input id="uy" type="range" min="-3" max="3" value="1" step="0.1" /></label>
+                <label>z <input id="uz" type="range" min="-3" max="3" value="0.5" step="0.1" /></label>
+              </div>
+
+              <div class="vector-control" data-vector="v">
+                <div class="vector-heading">
+                  <span class="legend-dot dot-v"></span>
+                  <strong>Vector v</strong>
+                  <output id="v-output">(-1.0, 1.5, 1.0)</output>
+                </div>
+                <label>x <input id="vx" type="range" min="-3" max="3" value="-1" step="0.1" /></label>
+                <label>y <input id="vy" type="range" min="-3" max="3" value="1.5" step="0.1" /></label>
+                <label>z <input id="vz" type="range" min="-3" max="3" value="1" step="0.1" /></label>
+              </div>
+
+              <div class="scalar-control">
+                <div class="scalar-heading">
+                  <strong>Scalar λ</strong>
+                  <output id="scalar-output">1.5</output>
+                </div>
+                <input id="scalar" type="range" min="-2" max="2" value="1.5" step="0.1" />
+                <div class="range-marks"><span>−2</span><span>0</span><span>2</span></div>
+              </div>
+            </div>
+
+            <div id="field-controls" hidden>
+              <div class="complex-control">
+                <div class="vector-heading">
+                  <span class="legend-dot dot-u"></span>
+                  <strong>Element z</strong>
+                  <output id="z-output">2.0 + 1.0i</output>
+                </div>
+                <label>real <input id="zr" type="range" min="-3" max="3" value="2" step="0.1" /></label>
+                <label>imag <input id="zi" type="range" min="-3" max="3" value="1" step="0.1" /></label>
+              </div>
+              <div class="complex-control">
+                <div class="vector-heading">
+                  <span class="legend-dot dot-v"></span>
+                  <strong>Element w</strong>
+                  <output id="w-output">−1.0 + 1.5i</output>
+                </div>
+                <label>real <input id="wr" type="range" min="-3" max="3" value="-1" step="0.1" /></label>
+                <label>imag <input id="wi" type="range" min="-3" max="3" value="1.5" step="0.1" /></label>
+              </div>
+            </div>
+
+            <div class="operation-block">
+              <p class="section-label">OPERATION</p>
+              <div id="vector-operations" class="segmented-control" role="group" aria-label="Vector operation">
+                <button class="operation active" data-operation="add" aria-pressed="true">u + v</button>
+                <button class="operation" data-operation="scale" aria-pressed="false">λu</button>
+                <button class="operation" data-operation="span" aria-pressed="false">span</button>
+              </div>
+              <div id="field-operations" class="segmented-control" role="group" aria-label="Field operation" hidden>
+                <button class="operation active" data-operation="field-add" aria-pressed="true">z + w</button>
+                <button class="operation" data-operation="multiply" aria-pressed="false">z × w</button>
+                <button class="operation" data-operation="inverse" aria-pressed="false">z⁻¹</button>
+              </div>
+            </div>
+
+            <div class="tip">
+              <span aria-hidden="true">◌</span>
+              <p><strong>Explore in 3D</strong><br />Drag to orbit · scroll to zoom</p>
+            </div>
+          </aside>
+
+          <div class="stage-wrap">
+            <div id="scene" role="img" aria-label="Interactive 3D vector visualization"></div>
+            <div class="scene-toolbar">
+              <button id="toggle-grid" class="scene-button active" type="button" aria-pressed="true">Grid</button>
+              <button id="toggle-labels" class="scene-button active" type="button" aria-pressed="true">Labels</button>
+            </div>
+            <div class="axis-label axis-x">x</div>
+            <div class="axis-label axis-y">y</div>
+            <div class="axis-label axis-z">z</div>
+            <div class="scene-legend" aria-label="Vector legend">
+              <span><i class="legend-dot dot-u"></i><b id="legend-first">u</b></span>
+              <span><i class="legend-dot dot-v"></i><b id="legend-second">v</b></span>
+              <span><i class="legend-dot dot-result"></i><b id="legend-result">u + v</b></span>
+            </div>
+            <div class="equation-card">
+              <span class="status-dot"></span>
+              <div>
+                <small id="equation-label">CLOSURE UNDER ADDITION</small>
+                <strong id="equation">u + v = (1.0, 2.5, 1.5)</strong>
+              </div>
+              <span class="valid-badge" id="valid-badge">IN THE SPACE ✓</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-families" aria-labelledby="space-families-title">
+          <div class="families-heading">
+            <div>
+              <p class="section-label">COMMON VECTOR SPACES</p>
+              <h2 id="space-families-title">One structure, many kinds of objects</h2>
+            </div>
+            <p>
+              Vectors do not have to be arrows. Any collection with valid addition and
+              scalar multiplication can form a vector space over a field 𝔽.
+            </p>
+          </div>
+
+          <div class="family-grid">
+            <article class="family-card family-tuples">
+              <span class="family-index">01 · TUPLES</span>
+              <div class="family-symbol" aria-label="F to the power n">𝔽<sup>n</sup></div>
+              <h3>Ordered <em>n</em>-tuples</h3>
+              <p>The vector space of ordered <em>n</em>-tuples whose entries come from 𝔽.</p>
+              <code>(a₁, a₂, …, aₙ)</code>
+            </article>
+
+            <article class="family-card family-matrices">
+              <span class="family-index">02 · MATRICES</span>
+              <div class="family-symbol" aria-label="M n by m of F">ℳ<sub>n×m</sub>(𝔽)</div>
+              <h3><em>n</em> × <em>m</em> matrices</h3>
+              <p>Matrices over 𝔽, added entry by entry and scaled by one field element.</p>
+              <code>[aᵢⱼ] + [bᵢⱼ] = [aᵢⱼ + bᵢⱼ]</code>
+            </article>
+
+            <article class="family-card family-polynomials">
+              <span class="family-index">03 · POLYNOMIALS</span>
+              <div class="family-symbol" aria-label="F of X">𝔽[X]</div>
+              <h3>Polynomials over 𝔽</h3>
+              <p>Polynomials of finite degree whose coefficients are elements of 𝔽.</p>
+              <code>a₀ + a₁X + ⋯ + aₖXᵏ</code>
+            </article>
+
+            <article class="family-card family-functions">
+              <span class="family-index">04 · FUNCTIONS</span>
+              <div class="family-symbol" aria-label="F to the power F">𝔽<sup>𝔽</sup></div>
+              <h3>Functions from 𝔽 to 𝔽</h3>
+              <p>All functions with pointwise addition and scalar multiplication.</p>
+              <code>(f + g)(x) = f(x) + g(x)</code>
+            </article>
+          </div>
+        </section>
+
+        <section class="axioms-section">
+          <div class="axioms-heading">
+            <div>
+              <p class="section-label">WHY IT WORKS</p>
+              <h2 id="axioms-title">A vector space stays consistent</h2>
+            </div>
+            <p id="axioms-description">These rules guarantee that combining vectors never breaks the system.</p>
+          </div>
+          <div class="axiom-grid" id="axiom-grid"></div>
+        </section>
+      </main>
+
+      <footer>
+        <span>AI-1115 · Linear Algebra</span>
+        <span>Field & Vector Space Explorer</span>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
