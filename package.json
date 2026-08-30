@@ -1,0 +1,14 @@
+{
+  "name": "visualize-coursework",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build --prefix ai-1115-la && node scripts/build-site.mjs",
+    "dev": "npm run build && npm exec --prefix ai-1115-la -- vite dist --host 127.0.0.1",
+    "preview": "npm exec --prefix ai-1115-la -- vite preview dist --host 127.0.0.1"
+  }
+}

@@ -1,6 +1,9 @@
 import * as THREE from 'three';
+import { inject } from '@vercel/analytics';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import './style.css';
+
+inject();
 
 const colors = {
   background: 0x0b1d21,
