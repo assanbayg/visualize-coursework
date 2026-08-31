@@ -116,6 +116,8 @@ input[type='range'] { width: 100%; accent-color: var(--orange); }
 .family-card h3 em, .family-card p em { font-family: 'DM Mono'; font-style: normal; }
 .family-card p { max-width: 430px; margin: 0 0 20px; color: #819696; font-size: 11px; line-height: 1.6; }
 .family-card code { display: inline-block; max-width: 100%; padding: 7px 9px; overflow: hidden; color: #bed0cc; background: rgba(0,0,0,.18); border-radius: 4px; font: 400 10px 'DM Mono'; white-space: nowrap; text-overflow: ellipsis; }
+.family-link { display: block; width: max-content; max-width: 100%; margin-top: 14px; color: #c8d8ff; font: 500 9px 'DM Mono'; letter-spacing: .04em; text-decoration: none; }
+.family-link:hover { color: #eef3ff; }
 .family-tuples { color: var(--orange); }
 .family-matrices { color: var(--mint); }
 .family-polynomials { color: var(--yellow); }

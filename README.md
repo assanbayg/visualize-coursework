@@ -9,7 +9,9 @@ Vercel site with a course directory at `/` and one stable path per course.
 
 The current demonstration covers fields and vector spaces. It includes vector
 addition, scalar multiplication, spans, complex-number operations, and common
-examples of vector spaces.
+examples of vector spaces. A focused lesson at `/ai1115/functions/` connects
+finite-domain functions to ℝ³ and compares ℝ ⊂ ℂ over real versus complex
+scalar fields.
 
 Source: [`ai-1115-la/`](ai-1115-la/)
 

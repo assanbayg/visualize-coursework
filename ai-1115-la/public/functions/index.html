@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07171b" />
+    <meta
+      name="description"
+      content="Interactive Three.js explanations of function spaces and subspaces for AI-1115."
+    />
+    <title>Functions as Vectors · AI-1115</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
+      integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <a class="brand" href="../" aria-label="Back to the AI-1115 lab">
+          <span class="brand-mark" aria-hidden="true">V</span>
+          <span><strong>Linear Algebra Lab</strong><small>AI-1115 · Interactive notes</small></span>
+        </a>
+        <nav class="lesson-switch" aria-label="Choose lesson">
+          <button class="lesson-button active" data-lesson="functions" aria-pressed="true">Functions as vectors</button>
+          <button class="lesson-button" data-lesson="subspaces" aria-pressed="false">Subspaces & scalars</button>
+        </nav>
+        <a class="back-link" href="../">Course home <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <p class="eyebrow" id="hero-eyebrow">FUNCTION SPACE · ℝ³</p>
+            <h1 id="hero-title">A function can be a vector.</h1>
+          </div>
+          <p id="hero-copy">Three inputs give three coordinates. Pointwise operations become the familiar vector operations of ℝ³.</p>
+        </section>
+
+        <section id="function-lesson" class="lesson" aria-labelledby="hero-title">
+          <div class="workspace">
+            <aside class="control-panel">
+              <div class="panel-heading">
+                <div><p class="section-label">REPRESENTATION</p><h2>One object, two views</h2></div>
+                <div class="view-toggle" role="group" aria-label="Function or vector view">
+                  <button class="view-button active" data-view="function" aria-pressed="true">Function</button>
+                  <button class="view-button" data-view="vector" aria-pressed="false">Vector</button>
+                </div>
+              </div>
+
+              <div class="object-key" aria-label="Function values">
+                <div><i class="swatch blue"></i><span><strong>f</strong><code>(2, 1, −1)</code></span></div>
+                <div><i class="swatch orange"></i><span><strong>g</strong><code>(−1, 2, 2)</code></span></div>
+                <div><i class="swatch green"></i><span><strong>f + g</strong><code>(1, 3, 1)</code></span></div>
+              </div>
+
+              <div class="scalar-block">
+                <div class="scalar-heading">
+                  <label for="scalar">Scalar <em>c</em></label>
+                  <output id="scalar-output" for="scalar">1.0</output>
+                </div>
+                <input id="scalar" type="range" min="-2" max="2" step="0.1" value="1" />
+                <div class="range-marks"><span>−2</span><span>−1</span><span>0</span><span>1</span><span>2</span></div>
+                <div class="live-equation" id="scalar-equation" aria-live="polite">cf = (2, 1, −1)</div>
+              </div>
+
+              <div class="transport" aria-label="Animation controls">
+                <button id="play" class="primary-control" type="button"><span aria-hidden="true">▶</span> Play</button>
+                <button id="pause" type="button"><span aria-hidden="true">Ⅱ</span> Pause</button>
+                <button id="step" type="button"><span aria-hidden="true">↦</span> Step</button>
+                <button id="reset" type="button"><span aria-hidden="true">↺</span> Reset</button>
+              </div>
+
+              <div class="step-readout">
+                <div><span id="step-number">01 / 07</span><strong id="step-title">A function is its outputs</strong></div>
+                <div class="progress-track" aria-hidden="true"><i id="progress"></i></div>
+                <p id="step-copy">Each arrow records one assignment. Once the three outputs are known, the function is completely determined.</p>
+              </div>
+
+              <div class="principle">
+                <span aria-hidden="true">✦</span>
+                <p>A vector is not required to be a physical arrow. A vector is any object belonging to a set with valid addition and scalar multiplication. Functions become vectors when these operations are defined pointwise.</p>
+              </div>
+            </aside>
+
+            <div class="stage-wrap">
+              <div id="function-scene" role="img" aria-label="Three-dimensional visualization mapping functions to coordinate vectors"></div>
+              <div id="function-labels" class="label-layer" aria-hidden="true"></div>
+              <div class="scene-hint">DRAG TO ORBIT · SCROLL TO ZOOM</div>
+              <div class="scene-legend" aria-label="Color legend">
+                <span><i class="swatch blue"></i>f</span><span><i class="swatch orange"></i>g</span><span><i class="swatch green"></i>f + g</span>
+              </div>
+              <div class="equation-banner" aria-live="polite">
+                <span class="status-dot"></span>
+                <div><small id="equation-kicker">FUNCTION VIEW</small><strong id="main-equation">f ↦ (f(s₁), f(s₂), f(s₃))</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lesson-notes">
+            <section class="calculation">
+              <div class="note-heading"><p class="section-label">POINTWISE ADDITION</p><h2 id="addition-rule">(f + g)(sᵢ) = f(sᵢ) + g(sᵢ)</h2></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th></th><th>s₁</th><th>s₂</th><th>s₃</th></tr></thead>
+                  <tbody>
+                    <tr class="row-f"><th>f</th><td>2</td><td>1</td><td>−1</td></tr>
+                    <tr class="row-g"><th>g</th><td>−1</td><td>2</td><td>2</td></tr>
+                    <tr class="row-sum"><th>f + g</th><td><span>2 + (−1)</span><b>1</b></td><td><span>1 + 2</span><b>3</b></td><td><span>−1 + 2</span><b>1</b></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="generalization">
+              <p class="section-label">GENERALIZATION</p>
+              <div class="general-formula" id="general-formula">𝓕(S, F) = Fˢ</div>
+              <p>Each <em>s ∈ S</em> acts like a coordinate. With three inputs the space looks like <em>F³</em>. With infinitely many inputs, it behaves like a vector space with infinitely many coordinates.</p>
+              <div class="identity-row"><span>zero function</span><code>0 ↔ (0, 0, 0)</code><span>additive inverse</span><code>−f ↔ (−2, −1, 1)</code></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="subspace-lesson" class="lesson" hidden aria-labelledby="subspace-title">
+          <div class="subspace-grid">
+            <aside class="subspace-panel">
+              <p class="section-label">THE AMBIENT SPACE</p>
+              <h2 id="subspace-title">The field changes the answer.</h2>
+              <p>We test the same subset, ℝ inside ℂ, but change which scalars are allowed.</p>
+
+              <div class="field-choice" role="group" aria-label="Choose scalar field">
+                <button class="field-button active" data-field="real" aria-pressed="true">Over ℝ</button>
+                <button class="field-button" data-field="complex" aria-pressed="false">Over ℂ</button>
+              </div>
+
+              <div id="real-controls" class="subspace-controls">
+                <div class="scalar-heading"><label for="real-scalar">Real scalar <em>c</em></label><output id="real-output">1.5</output></div>
+                <input id="real-scalar" type="range" min="-2" max="2" step="0.1" value="1.5" />
+              </div>
+
+              <div id="complex-controls" class="subspace-controls" hidden>
+                <span class="control-label">Choose a complex scalar</span>
+                <div class="complex-choices" role="group" aria-label="Complex scalar">
+                  <button data-complex="1,0">1</button><button class="active" data-complex="0,1">i</button><button data-complex="1,1">1 + i</button><button data-complex="0,-1">−i</button>
+                </div>
+              </div>
+
+              <div class="closure-test" aria-live="polite">
+                <span id="closure-icon">✓</span>
+                <div><small>CLOSURE UNDER SCALAR MULTIPLICATION</small><strong id="closure-equation">1.5 · 1 = 1.5 ∈ ℝ</strong><p id="closure-copy">Every real scalar keeps every real vector on the real axis.</p></div>
+              </div>
+
+              <div class="subspace-definition">
+                <strong>Subspace test</strong>
+                <p>A subset must contain 0 and remain closed under vector addition and multiplication by <em>every scalar in the chosen field</em>.</p>
+              </div>
+            </aside>
+
+            <div class="subspace-stage-wrap">
+              <div id="subspace-scene" role="img" aria-label="Complex plane showing whether scalar multiplication leaves the real axis"></div>
+              <div id="subspace-labels" class="label-layer" aria-hidden="true"></div>
+              <div class="plane-label real-axis-label">ℝ · candidate subspace</div>
+              <div class="plane-label complex-plane-label">ℂ · ambient vector space</div>
+              <div class="subspace-result" id="subspace-result">ℝ is a subspace of ℂ over ℝ</div>
+            </div>
+          </div>
+
+          <div class="comparison-strip">
+            <article class="comparison yes">
+              <span>OVER ℝ</span><h3>Closed ✓</h3><p>Real vector × real scalar stays real.</p><code>c · x ∈ ℝ</code>
+            </article>
+            <div class="field-arrow"><span>same subset ℝ</span><i>→</i><span>different scalars</span></div>
+            <article class="comparison no">
+              <span>OVER ℂ</span><h3>Not closed ✕</h3><p>One counterexample is enough: multiplying by <em>i</em> leaves ℝ.</p><code>i · 1 = i ∉ ℝ</code>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer><span>AI-1115 · Linear Algebra</span><span>Function Space + Subspace Explorer</span></footer>
+    </div>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
