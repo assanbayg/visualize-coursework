@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="description" content="Turn computer latency into distance, inspired by Grace Hopper's nanosecond wires." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Show Me the Time · AI-1020</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Back to course directory">
+          <span class="brand-mark" aria-hidden="true">V</span>
+          <span><strong>Computer Systems Lab</strong><small>AI-1020 · Interactive notes</small></span>
+        </a>
+        <span class="lecture-label">GRACE HOPPER · SIGNAL LATENCY</span>
+        <a class="back-link" href="/">All courses <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main>
+        <section class="intro">
+          <div>
+            <p class="eyebrow">SHOW ME THE TIME</p>
+            <h1>How long is a nanosecond?</h1>
+          </div>
+          <p>Turn an invisible delay into the farthest distance a signal could travel. Hopper used wire. When the wire no longer fits, we use the world.</p>
+        </section>
+
+        <section class="lab" aria-labelledby="distance-heading">
+          <aside class="controls">
+            <div class="panel-heading">
+              <p class="section-label">TIME INPUT</p>
+              <h2>Choose a delay</h2>
+            </div>
+
+            <div class="mode-switch" role="group" aria-label="Input mode">
+              <button type="button" class="mode-button active" data-mode="units" aria-pressed="true">Time unit</button>
+              <button type="button" class="mode-button" data-mode="hardware" aria-pressed="false">Hardware</button>
+              <button type="button" class="mode-button" data-mode="custom" aria-pressed="false">Custom</button>
+            </div>
+
+            <div class="mode-panel" data-panel="units">
+              <div class="preset-grid" aria-label="Choose a time unit">
+                <button type="button" data-time="1e-12"><strong>1 ps</strong><span>picosecond</span></button>
+                <button type="button" class="selected" data-time="1e-9"><strong>1 ns</strong><span>nanosecond</span></button>
+                <button type="button" data-time="1e-6"><strong>1 µs</strong><span>microsecond</span></button>
+                <button type="button" data-time="1e-3"><strong>1 ms</strong><span>millisecond</span></button>
+                <button type="button" data-time="1"><strong>1 s</strong><span>second</span></button>
+              </div>
+            </div>
+
+            <div class="mode-panel hidden" data-panel="hardware">
+              <label class="field-label" for="hardware">Typical access latency</label>
+              <select id="hardware">
+                <option value="0.5e-9">L1 cache · 0.5 ns</option>
+                <option value="4e-9">L2 cache · 4 ns</option>
+                <option value="12e-9">L3 cache · 12 ns</option>
+                <option value="100e-9">DRAM · 100 ns</option>
+                <option value="100e-6">NVMe SSD · 100 µs</option>
+                <option value="5e-3">Hard drive · 5 ms</option>
+              </select>
+              <p class="field-note">Representative teaching values; real hardware varies.</p>
+            </div>
+
+            <div class="mode-panel hidden" data-panel="custom">
+              <label class="field-label" for="custom-value">Enter any duration</label>
+              <div class="custom-row">
+                <input id="custom-value" type="number" min="0.001" step="any" value="1" inputmode="decimal" />
+                <select id="custom-unit" aria-label="Custom time unit">
+                  <option value="1e-12">ps</option>
+                  <option value="1e-9" selected>ns</option>
+                  <option value="1e-6">µs</option>
+                  <option value="1e-3">ms</option>
+                  <option value="1">s</option>
+                </select>
+              </div>
+              <p id="input-error" class="error" role="alert"></p>
+            </div>
+
+            <div class="medium-block">
+              <div class="field-heading">
+                <label for="medium">Signal medium</label>
+                <output id="speed-output" for="medium">100% of c</output>
+              </div>
+              <select id="medium">
+                <option value="1">Vacuum · upper limit</option>
+                <option value="0.67">Copper cable · ≈ 67% of c</option>
+                <option value="0.68">Fiber optic cable · ≈ 68% of c</option>
+              </select>
+            </div>
+
+            <blockquote>
+              <span aria-hidden="true">“</span>
+              <p>Please cut off a nanosecond and send it over to me.</p>
+              <cite>Grace Hopper</cite>
+            </blockquote>
+          </aside>
+
+          <div class="visual-column">
+            <div class="readout" aria-live="polite">
+              <div>
+                <span id="time-label">1 nanosecond</span>
+                <strong id="distance-value">29.98 cm</strong>
+              </div>
+              <p id="equation">distance = 299,792,458 m/s × 1 ns</p>
+            </div>
+
+            <div class="stage" id="stage">
+              <div class="scale-ruler" aria-hidden="true"><span>0</span><i></i><span id="ruler-end">30 cm</span></div>
+              <div class="scene" id="scene" role="img" aria-labelledby="distance-heading" aria-describedby="comparison-copy">
+                <div class="object-layer" id="object-layer"></div>
+                <div class="wire-wrap" id="wire-wrap">
+                  <div class="wire" id="wire"><i></i></div>
+                  <span class="wire-start">START</span>
+                  <span class="wire-end">SIGNAL LIMIT</span>
+                </div>
+              </div>
+              <div class="stage-caption">
+                <span id="scale-label">FULL-SCALE WIRE</span>
+                <span>LIGHT-CONE LIMIT · ONE WAY</span>
+              </div>
+            </div>
+
+            <section class="comparison" aria-labelledby="distance-heading">
+              <p class="section-label">MAKE IT PHYSICAL</p>
+              <div class="comparison-copy">
+                <h2 id="distance-heading">About the length of a school ruler.</h2>
+                <p id="comparison-copy">Hopper’s famous nanosecond wire was 11.8 inches long—the maximum distance light can travel in this time.</p>
+              </div>
+              <div class="scale-track" aria-label="Distance scale">
+                <div class="scale-progress" id="scale-progress"></div>
+                <div class="scale-marks" id="scale-marks"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="principle">
+          <span aria-hidden="true">✦</span>
+          <div><p class="section-label">THE SYSTEMS IDEA</p><h2>Latency is distance you cannot wish away.</h2></div>
+          <p>Even at the speed of light, information needs time to move. Cache hierarchy, component placement, and network geography all turn physical distance into system delay.</p>
+        </section>
+      </main>
+
+      <footer><span>AI-1020 · Computer Systems</span><span>Distance model uses one-way propagation</span></footer>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

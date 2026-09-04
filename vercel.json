@@ -15,12 +15,26 @@
       "source": "/AI1115",
       "destination": "/ai1115",
       "permanent": true
+    },
+    {
+      "source": "/ai-1020",
+      "destination": "/ai1020",
+      "permanent": true
+    },
+    {
+      "source": "/AI1020",
+      "destination": "/ai1020",
+      "permanent": true
     }
   ],
   "rewrites": [
     {
       "source": "/ai1115",
       "destination": "/ai1115/index.html"
+    },
+    {
+      "source": "/ai1020",
+      "destination": "/ai1020/index.html"
     },
     {
       "source": "/",
@@ -31,6 +45,16 @@
         }
       ],
       "destination": "/ai1115/index.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "ai1020\\..+"
+        }
+      ],
+      "destination": "/ai1020/index.html"
     }
   ],
   "headers": [

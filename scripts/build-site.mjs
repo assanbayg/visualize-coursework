@@ -11,7 +11,11 @@ cpSync(resolve(root, 'site'), output, { recursive: true });
 cpSync(resolve(root, 'ai-1115-la', 'dist'), resolve(output, 'ai1115'), {
   recursive: true,
 });
+cpSync(resolve(root, 'ai-1020-cso'), resolve(output, 'ai1020'), {
+  recursive: true,
+});
 
 console.log('Built deployment bundle:');
 console.log('  /        Coursework directory');
 console.log('  /ai1115  AI-1115 Linear Algebra');
+console.log('  /ai1020  AI-1020 Computer Systems');
