@@ -29,13 +29,31 @@ The course palette and interface conventions are documented in
 
 ### AI-1110 Calculus
 
-Not started.
+The course does not have any demonstrations yet. Its standalone source directory
+is ready at [`ai-1110-calc/`](ai-1110-calc/); it is not nested inside the
+AI-1115 application.
+
+### AI-1020 Computer Systems
+
+The current demonstration turns nanoseconds into the distance light travels,
+making hardware latency easier to visualize.
+
+Source: [`ai-1020-cso/`](ai-1020-cso/)
 
 ## Project structure
 
 Each course is kept in its own directory with its own dependencies and build
 configuration. Demonstrations within a course share a visual system; other
 courses use the same layout principles with a different palette.
+
+```text
+visualize-coursework/
+├── ai-1020-cso/    # AI-1020 Computer Systems
+├── ai-1110-calc/   # AI-1110 Calculus
+├── ai-1115-la/     # AI-1115 Linear Algebra
+├── scripts/        # Production build tooling
+└── site/           # Shared course directory
+```
 
 ## Deploy to Vercel
 
